@@ -61,3 +61,12 @@ let fragment=
 156,19.04,15.61,13.54,12.56,11.03,10.10,9.52,9.16
 157,19.24,15.76,13.65,12.71,11.17,10.19,9.60,9.24
 `; 
+
+let transform=fragment=>{
+	let output=[];
+	for(let x of fragment.split("\n")){
+		let array=x.split(",");
+		output[array.splice(0,1)]=array;
+	}
+	return output;
+}
