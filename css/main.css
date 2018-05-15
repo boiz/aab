@@ -1,5 +1,6 @@
 *{
 	font-family: "arial";
+	font-size:12px;
 }
 
 .codeprice{
@@ -17,8 +18,34 @@ input[type=radio]{
 
 #container{
 	font-size:.8em;
+	display:flex;
+}
+
+.sample{
+	font-size:0;
+	cursor: pointer;
+	margin-right:12px;
+}
+
+.sample:hover{
+	background:#ccc;
 }
 
 #container label,#container input{
 	cursor: pointer;
+	color:#ccc;
+	font-size:12px;
+}
+
+.tocopy{
+	display:none;
+}
+
+input[type="radio"]{
+	position:relative;
+	top:.15em;
+}
+
+#copybutton{
+	cursor:pointer;
 }
