@@ -2,38 +2,75 @@
 <html>
 <head>
 	<title>Price code lookup</title>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
 
-<div>
-	<label class="codeprice">Code</label>
-	<input type="" name="" id="code">
-</div>
-
-<div class="tocopy">
-	
-	<a class="sample">
-		<label></label>
-		<input type="radio" name="options">
-	</a>
-
-</div>
-
-
 <div id="container">
 
+	<div class="row">
+		<div class="section">
+			<label>Part number</label>
+			<input type="text" class="partno">
+		</div>
+		<div class="section">
+			<label>Description</label>
+			<input type="text" class="desc" value="no result">
+		</div>
+
+		<div class="section">
+			<label>Code</label>
+			<input type="" name="" class="code">
+		</div>
+
+		<div class="section">
+			<label>Quantity</label>
+			<select class="quantity">
+				<option>1-5</option>
+				<option>6-11</option>
+				<option>12-23</option>
+				<option>24-49</option>
+				<option>50-99</option>
+				<option>100-199</option>
+				<option>200-499</option>
+				<option>500-UP</option>
+				<option selected>Select</option>
+			</select>
+		</div>
+
+	<!-- 	<div class="tocopy">
+			
+			<a class="sample">
+				<label></label>
+				<input type="radio" name="options">
+			</a>
+		</div>
+
+
+		<div id="container">
+
+		</div> -->
+
+		<div class="section">
+			<label>Price</label>
+			<input class="price" type="" name="">
+			<button class="copybutton">Copy to clipboard</button>
+		</div>
+
+	</div>
+
+
 </div>
 
-<div>
-	<label class="codeprice">Price</label>
-	<input id="price" type="" name="">
-	<button id="copybutton">Copy to clipboard</button>
-</div>
+<button id="add">Add Item</button>
 
 <script src="js/data.js"></script>
-<script src="js/main.js"></script>
 <script src="js/clipboard.js"></script>
+
+<script src="js/main.js"></script>
+
+<script src="js/fraction.js"></script>
 </body>
 </html>

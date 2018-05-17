@@ -3,22 +3,12 @@
 	font-size:12px;
 }
 
-.codeprice{
-	width:3em;
-	display: inline-block;
-}
-
-div{
+.row{
 	margin-bottom:1em;
 }
 
 input[type=radio]{
 	margin-right:1em;
-}
-
-#container{
-	font-size:.8em;
-	display:flex;
 }
 
 .sample{
@@ -31,11 +21,6 @@ input[type=radio]{
 	background:#ccc;
 }
 
-#container label,#container input{
-	cursor: pointer;
-	color:#ccc;
-	font-size:12px;
-}
 
 .tocopy{
 	display:none;
@@ -46,6 +31,18 @@ input[type="radio"]{
 	top:.15em;
 }
 
-#copybutton{
+.row{
+	display:flex;
+}
+
+.section input{
+	width:10em;
+}
+
+.section{
+	margin-right:1em;
+}
+
+button, select{
 	cursor:pointer;
 }

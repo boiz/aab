@@ -1,129 +1,215 @@
 /*version .5*/
 
-let transform=fragment=>{
-	let output=[];
-	for(let x of fragment.split("\n")){
-		let array=x.split(",");
-		output[array.splice(0,1)]=array;
+
+
+
+
+
+let bundle=root=>{
+
+	let partno=root.querySelector(".partno");
+	let desc=root.querySelector(".desc");
+	let code=root.querySelector(".code");
+	let quantity=root.querySelector(".quantity");
+	let price=root.querySelector(".price");
+	let copybutton=root.querySelector(".copybutton");
+
+	let transform=fragment=>{
+		let output=[];
+		for(let x of fragment.split("\n")){
+			let array=x.split(",");
+			output[array.splice(0,1)]=array;
+		}
+		return output;
 	}
-	return output;
-}
 
-let extendTransform=extend=>{
-	
-	let array=[];
-	let output=[];
+	let extendTransform=extend=>{
+		
+		let array=[];
+		let output=[];
 
-	for(let x of extend.split(",,")){
-		if(x){
-			let item=x.split(",\n");
-			array.push(item[0]);
-			if(item[1]) array.push(item[1]);
+		for(let x of extend.split(",,")){
+			if(x){
+				let item=x.split(",\n");
+				array.push(item[0]);
+				if(item[1]) array.push(item[1]);
+			}
+		}
+
+		for(let x of array){
+			let item=x.split(",");
+			output[item[0]]=item[1]
+		}
+
+		return output;
+	}
+
+
+	let data=transform(fragment);
+	let extendData=extendTransform(extend);
+
+
+	let doIt=()=>{
+
+		try{
+			//let r=data[code.value][document.querySelector("input[name='options']:checked").dataset.index];
+			
+			let r=data[code.value][quantity.selectedIndex];
+			if(r) price.value=r;
+
+			else price.value="no result";
+			
+		}
+		catch(e){
+			price.value="no result";
+		}
+
+	}
+
+
+	let doEx=()=>{
+		let r=extendData[code.value];
+		if(r) price.value=r;
+		else price.value="no result";
+	}
+
+
+	let createOptions=()=>{
+
+		let sample=document.querySelector(".tocopy .sample");
+
+		options.forEach((x,i)=>{
+
+			let ch=sample.cloneNode(true);
+			let label=ch.querySelector("label");
+			let input=ch.querySelector("input");
+
+			label.setAttribute("for",x);
+			label.innerText=input.id=x;
+			input.dataset.index=i;
+			input.disabled=true;
+
+			ch.onclick=()=>{
+				input.click();
+				doIt();
+			}
+
+			container.appendChild(ch);
+
+		});
+
+	}
+
+	let setDisableRadioGroup=value=>{
+		for(let x of container.querySelectorAll("input")){
+			x.disabled=value;
+		}
+
+		let color;
+		if(value) color="#ccc";
+		else color="black";
+
+		for(let x of container.querySelectorAll("label")){
+			x.style.setProperty("color",color);
 		}
 	}
 
-	for(let x of array){
-		let item=x.split(",");
-		output[item[0]]=item[1]
+
+
+	let setDisabledSelectGroup=boolean=>{
+		quantity.disabled=boolean;
 	}
 
-	return output;
-}
 
 
-let data=transform(fragment);
-let extendData=extendTransform(extend);
+	code.onkeyup=()=>{
 
-
-let doIt=()=>{
-
-	try{
-		let r=data[code.value][document.querySelector("input[name='options']:checked").dataset.index];
-		if(r) price.value=r;
-
-		else price.value="no result"
-		
-	}
-	catch(e){
-		price.value="no result";
-	}
-
-}
-
-
-let doEx=()=>{
-	let r=extendData[code.value];
-	if(r) price.value=r;
-	else price.value="no result"
-}
-
-
-let createOptions=()=>{
-
-	let sample=document.querySelector(".tocopy .sample");
-
-	options.forEach((x,i)=>{
-
-		let ch=sample.cloneNode(true);
-		let label=ch.querySelector("label");
-		let input=ch.querySelector("input");
-
-		label.setAttribute("for",x);
-		label.innerText=input.id=x;
-		input.dataset.index=i;
-		input.disabled=true;
-
-		ch.onclick=()=>{
-			input.click();
+		if(code.value>=101&&code.value<=271){
+			setDisabledSelectGroup(false);
 			doIt();
 		}
 
-		container.appendChild(ch);
+		else{
+			setDisabledSelectGroup(true);
+			doEx();
 
-	});
-
-}
-
-createOptions();
-
-
-let setDisable=value=>{
-	for(let x of container.querySelectorAll("input")){
-		x.disabled=value;
+		}
 	}
 
-	let color;
-	if(value) color="#ccc";
-	else color="black";
-
-	for(let x of container.querySelectorAll("label")){
-		x.style.setProperty("color",color);
-	}
-
-}
-
-
-code.onkeyup=()=>{
-
-	if(code.value>=101&&code.value<=271){
-		setDisable(false);
+	quantity.onchange=()=>{
 		doIt();
 	}
 
 
-	else{
-		setDisable(true);
-		doEx();
-
+	copybutton.onclick=()=>{
+		let text=copybutton.innerText;
+		copybutton.innerText="Copied!";
+		setTimeout(()=>copybutton.innerText=text,2000);
 	}
+
+	partno.focus();
+
+
+
+	for (let x of root.querySelectorAll("input")){
+		x.onclick=()=>x.select();
+	}
+
+
+	let getFraction=decimal=>{
+		return (new Fraction(decimal)).toFraction();
+	}
+
+
+	let getPartObj=partno=>{
+		let str=partno.replace(/ /g,"");
+		let array=str.substr(1).split("-");
+		return {
+			TYPE:str[0],
+			OD:array[0],
+			LENGTH:array[1],
+			ID:array[2]
+		}
+	}
+
+	let partNoToDesc=partObj=>{
+		return partObj.TYPE+" "+partObj.ID+"×"+getFraction(partObj.OD/64)+"×"+getFraction(partObj.LENGTH/16);
+	}
+
+	let detectUndifinedinObject=obj=>{
+		for(let key in obj){
+			if(!obj[key]) return true;
+		}
+	}
+
+	partno.onkeyup=()=>{
+
+		let obj=getPartObj(partno.value);
+
+		if(detectUndifinedinObject(obj)){
+			desc.value="no result";
+			return;
+		}
+
+		desc.value=partNoToDesc(obj);
+	}
+
+	copybutton.addEventListener("click", function() {
+	    copyToClipboard(price);
+	});
+
+
+}
+
+let sample=container.firstElementChild;
+
+
+add.onclick=()=>{
+	let node=sample.cloneNode(true);
+	bundle(node);
+	container.appendChild(node);
 }
 
 
-copybutton.onclick=()=>{
-	let text=copybutton.innerText;
-	copybutton.innerText="Copied!";
-	setTimeout(()=>copybutton.innerText=text,2000);
-}
 
-code.focus();
-code.onclick=()=>code.select();
+bundle(container.firstElementChild);
