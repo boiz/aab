@@ -1,8 +1,4 @@
-/*version .5*/
-
-
-
-
+/*version .6*/
 
 
 let bundle=root=>{
@@ -201,7 +197,7 @@ let bundle=root=>{
 
 }
 
-let sample=container.firstElementChild;
+let sample=container.firstElementChild.cloneNode(true);
 
 
 add.onclick=()=>{
