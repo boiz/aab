@@ -1,5 +1,35 @@
 /*version .6*/
 
+const getXHR=(url,dataType,callback)=>{
+	let xml=new XMLHttpRequest;
+	xml.open("get",url);
+	xml.send();
+	xml.responseType=dataType;
+	xml.onload=()=>callback(xml.response);
+}
+
+const getFormData=data=>{
+	var param="";
+	var count=0;
+	for(var k in data){
+		var value=data[k];
+		if(count++) k="&"+k;
+		param+=k+"="+value;
+	}
+	count=0;
+	return param;
+}
+
+const postXhr=obj=>{
+	var xml=new XMLHttpRequest;
+	xml.open("post",obj.url);
+	xml.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	xml.responseType="text";
+	xml.send(getFormData(obj.data));
+	xml.onload=function(){
+		obj.callback(this.response);
+	}
+}
 
 let bundle=root=>{
 
@@ -110,16 +140,11 @@ let bundle=root=>{
 		}
 	}
 
-
-
 	let setDisabledSelectGroup=boolean=>{
 		quantity.disabled=boolean;
 	}
 
-
-
-	code.onkeyup=()=>{
-
+	let generatePrice=()=>{
 		if(code.value>=101&&code.value<=271){
 			setDisabledSelectGroup(false);
 			doIt();
@@ -131,6 +156,9 @@ let bundle=root=>{
 
 		}
 	}
+
+
+	code.onkeyup=generatePrice;
 
 	quantity.onchange=()=>{
 		doIt();
@@ -181,6 +209,7 @@ let bundle=root=>{
 	partno.onkeyup=()=>{
 
 		let obj=getPartObj(partno.value);
+		//console.log(obj);
 
 		if(detectUndifinedinObject(obj)){
 			desc.value="no result";
@@ -188,12 +217,24 @@ let bundle=root=>{
 		}
 
 		desc.value=partNoToDesc(obj);
+
+
+		postXhr({
+			url:"http://localhost:3002/query",
+			data:{
+				partno:partno.value.replace(/ /g,"")
+			},
+			callback:r=>{
+				code.value=r;
+				generatePrice();
+			}
+		});
+
 	}
 
 	copybutton.addEventListener("click", function() {
 	    copyToClipboard(price);
 	});
-
 
 }
 
@@ -201,11 +242,29 @@ let sample=container.firstElementChild.cloneNode(true);
 
 
 add.onclick=()=>{
-	let node=sample.cloneNode(true);
-	bundle(node);
-	container.appendChild(node);
+	
+	let partno=container.lastElementChild.querySelector(".partno").value;
+	let code=container.lastElementChild.querySelector(".code").value;
+
+
+	if(partno==""||code=="") return;
+
+	postXhr({
+		url:"http://localhost:3002/update",
+		data:{
+			partno:partno.replace(/ /g,""),
+			code:code
+		},
+		callback:()=>{
+
+			let node=sample.cloneNode(true);
+			bundle(node);
+			container.appendChild(node);
+
+		}
+	});
+
+
 }
-
-
 
 bundle(container.firstElementChild);
