@@ -181,7 +181,7 @@ let bundle=root=>{
 
 
 	let getFraction=decimal=>{
-		return (new Fraction(decimal)).toFraction();
+		return (new Fraction(decimal)).toFraction(true);
 	}
 
 
@@ -197,7 +197,7 @@ let bundle=root=>{
 	}
 
 	let partNoToDesc=partObj=>{
-		return partObj.TYPE+" "+partObj.ID+"×"+getFraction(partObj.OD/64)+"×"+getFraction(partObj.LENGTH/16);
+		return partObj.TYPE+" "+partObj.ID+"×"+getFraction(partObj.OD/64).replace(" ","-")+"×"+getFraction(partObj.LENGTH/16);
 	}
 
 	let detectUndifinedinObject=obj=>{
