@@ -1,5 +1,8 @@
 /*version .6*/
 
+//const ip="localhost";
+const ip="47.176.29.180";
+
 const getXHR=(url,dataType,callback)=>{
 	let xml=new XMLHttpRequest;
 	xml.open("get",url);
@@ -31,7 +34,7 @@ const postXhr=obj=>{
 	}
 }
 
-let bundle=root=>{
+const bundle=root=>{
 
 	let partno=root.querySelector(".partno");
 	let desc=root.querySelector(".desc");
@@ -40,7 +43,7 @@ let bundle=root=>{
 	let price=root.querySelector(".price");
 	let copybutton=root.querySelector(".copybutton");
 
-	let transform=fragment=>{
+	const transform=fragment=>{
 		let output=[];
 		for(let x of fragment.split("\n")){
 			let array=x.split(",");
@@ -49,7 +52,7 @@ let bundle=root=>{
 		return output;
 	}
 
-	let extendTransform=extend=>{
+	const extendTransform=extend=>{
 		
 		let array=[];
 		let output=[];
@@ -75,7 +78,7 @@ let bundle=root=>{
 	let extendData=extendTransform(extend);
 
 
-	let doIt=()=>{
+	const doIt=()=>{
 
 		try{
 			//let r=data[code.value][document.querySelector("input[name='options']:checked").dataset.index];
@@ -93,14 +96,14 @@ let bundle=root=>{
 	}
 
 
-	let doEx=()=>{
+	const doEx=()=>{
 		let r=extendData[code.value];
 		if(r) price.value=r;
 		else price.value="no result";
 	}
 
 
-	let createOptions=()=>{
+	const createOptions=()=>{
 
 		let sample=document.querySelector(".tocopy .sample");
 
@@ -126,7 +129,7 @@ let bundle=root=>{
 
 	}
 
-	let setDisableRadioGroup=value=>{
+	const setDisableRadioGroup=value=>{
 		for(let x of container.querySelectorAll("input")){
 			x.disabled=value;
 		}
@@ -220,7 +223,7 @@ let bundle=root=>{
 
 
 		postXhr({
-			url:"http://localhost:3002/query",
+			url:`http://${ip}:3002/query`,
 			data:{
 				partno:partno.value.replace(/ /g,"")
 			},
@@ -250,7 +253,7 @@ add.onclick=()=>{
 	if(partno==""||code=="") return;
 
 	postXhr({
-		url:"http://localhost:3002/update",
+		url:`http://${ip}:3002/update`,
 		data:{
 			partno:partno.replace(/ /g,""),
 			code:code
