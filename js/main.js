@@ -187,17 +187,21 @@ const bundle=root=>{
 		return (new Fraction(decimal)).toFraction(true);
 	}
 
+	const getPartObj=partno=>{
+		const str=partno.replace(/ /g,"");
+		const exec=/^[a-z]+/i.exec(str);
+		
+		if(exec) type=exec[0];
+		const array=str.replace(type,"").split("-");
 
-	let getPartObj=partno=>{
-		let str=partno.replace(/ /g,"");
-		let array=str.substr(1).split("-");
 		return {
-			TYPE:str[0],
+			TYPE:type,
 			OD:array[0],
 			LENGTH:array[1],
 			ID:array[2]
 		}
 	}
+
 
 	let partNoToDesc=partObj=>{
 		return partObj.TYPE+" "+partObj.ID+"×"+getFraction(partObj.OD/64).replace(" ","-")+"×"+getFraction(partObj.LENGTH/16);
