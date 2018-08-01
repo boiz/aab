@@ -46,3 +46,9 @@ input[type="radio"]{
 button, select{
 	cursor:pointer;
 }
+
+.verinfo{
+	line-height: 6;
+	font-size: 0.8em;
+	color: gray;	
+}

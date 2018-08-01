@@ -203,11 +203,11 @@ const bundle=root=>{
 	}
 
 
-	let partNoToDesc=partObj=>{
+	const partNoToDesc=partObj=>{
 		return partObj.TYPE+" "+partObj.ID+"×"+getFraction(partObj.OD/64).replace(" ","-")+"×"+getFraction(partObj.LENGTH/16);
 	}
 
-	let detectUndifinedinObject=obj=>{
+	let detectUndefinedinObject=obj=>{
 		for(let key in obj){
 			if(!obj[key]) return true;
 		}
@@ -215,16 +215,26 @@ const bundle=root=>{
 
 	partno.onkeyup=()=>{
 
-		let obj=getPartObj(partno.value);
-		//console.log(obj);
 
-		if(detectUndifinedinObject(obj)){
-			desc.value="no result";
-			return;
+
+		if(/[x×]/i.test(partno.value)) desc.value=partno.value;
+
+		else{
+
+			const obj=getPartObj(partno.value);
+			//console.log(obj);
+
+			if(detectUndefinedinObject(obj)){
+				desc.value="no result";
+				return;
+			}
+
+
+			desc.value=partNoToDesc(obj);
+
+
+
 		}
-
-		desc.value=partNoToDesc(obj);
-
 
 		postXhr({
 			url:`http://${ip}:3002/query`,
@@ -236,6 +246,8 @@ const bundle=root=>{
 				generatePrice();
 			}
 		});
+
+
 
 	}
 
