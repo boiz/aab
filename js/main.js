@@ -11,28 +11,19 @@ const getXHR=(url,dataType,callback)=>{
 	xml.onload=()=>callback(xml.response);
 }
 
-const getFormData=data=>{
-	var param="";
-	var count=0;
-	for(var k in data){
-		var value=data[k];
-		if(count++) k="&"+k;
-		param+=k+"="+value;
+
+/*Last modified 7.2018*/
+const postForm=obj=>{
+	const xml=new XMLHttpRequest;
+	xml.open("post",obj.url);
+	xml.responseType="text";
+	xml.send((obj.data));
+	xml.onload=()=>{
+		if(obj.callback) obj.callback(xml.response);
 	}
-	count=0;
-	return param;
 }
 
-const postXhr=obj=>{
-	var xml=new XMLHttpRequest;
-	xml.open("post",obj.url);
-	xml.setRequestHeader("content-type","application/x-www-form-urlencoded");
-	xml.responseType="text";
-	xml.send(getFormData(obj.data));
-	xml.onload=function(){
-		obj.callback(this.response);
-	}
-}
+
 
 const bundle=root=>{
 
@@ -216,7 +207,6 @@ const bundle=root=>{
 	partno.onkeyup=()=>{
 
 
-
 		if(/[x×]/i.test(partno.value)) desc.value=partno.value;
 
 		else{
@@ -232,15 +222,16 @@ const bundle=root=>{
 
 			desc.value=partNoToDesc(obj);
 
-
-
 		}
 
-		postXhr({
+
+
+		const fd=new FormData;
+		fd.append("partno",partno.value.replace(/ /g,""));
+
+		postForm({
 			url:`http://${ip}:3002/query`,
-			data:{
-				partno:partno.value.replace(/ /g,"")
-			},
+			data:fd,
 			callback:r=>{
 				code.value=r;
 				generatePrice();
@@ -268,12 +259,15 @@ add.onclick=()=>{
 
 	if(partno==""||code=="") return;
 
-	postXhr({
+
+
+	const fd=new FormData;
+	fd.append("partno",partno.replace(/ /g,""));
+	fd.append("code",code);
+
+	postForm({
 		url:`http://${ip}:3002/update`,
-		data:{
-			partno:partno.replace(/ /g,""),
-			code:code
-		},
+		data:fd,
 		callback:()=>{
 
 			let node=sample.cloneNode(true);
