@@ -70,11 +70,10 @@ const bundle=root=>{
 
 
 	const doIt=()=>{
-
+		
 		try{
-			//let r=data[code.value][document.querySelector("input[name='options']:checked").dataset.index];
 			
-			let r=data[code.value][quantity.selectedIndex];
+			const r=data[code.value.replace("+","")][quantity.selectedIndex];
 			if(r) price.value=r;
 
 			else price.value="no result";
@@ -88,7 +87,7 @@ const bundle=root=>{
 
 
 	const doEx=()=>{
-		let r=extendData[code.value];
+		const r=extendData[code.value.replace("+","")];
 		if(r) price.value=r;
 		else price.value="no result";
 	}
@@ -138,8 +137,11 @@ const bundle=root=>{
 		quantity.disabled=boolean;
 	}
 
-	let generatePrice=()=>{
-		if(code.value>=101&&code.value<=271){
+	const generatePrice=()=>{
+
+		const value=code.value.replace("+","");
+
+		if(value>=101&&value<=271){
 			setDisabledSelectGroup(false);
 			doIt();
 		}
